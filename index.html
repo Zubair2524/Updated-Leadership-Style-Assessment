@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leadership Assessment - STAR-Shaigan Learning Portal</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Landing Page -->
+    <div id="landing-page" class="page active">
+        <div class="container">
+            <div class="logo-container">
+                <div class="logo animated-logo">
+                    <div class="logo-glow"></div>
+                    <h1>STAR-Shaigan</h1>
+                    <p>Learning Portal</p>
+                </div>
+            </div>
+            
+            <div class="welcome-card glassmorphic">
+                <h2>Leadership Assessment</h2>
+                <p class="subtitle">Discover Your Leadership Style in Pakistan's Pharmaceutical Industry</p>
+                
+                <form id="user-form" class="user-form">
+                    <div class="form-group">
+                        <label for="fullName">Full Name</label>
+                        <input type="text" id="fullName" name="fullName" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="city">City</label>
+                        <input type="text" id="city" name="city" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="team">Team</label>
+                        <input type="text" id="team" name="team" required>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="designation">Designation</label>
+                        <input type="text" id="designation" name="designation" required>
+                    </div>
+                    
+                    <button type="submit" class="btn-primary">Start Assessment</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Assessment Page -->
+    <div id="assessment-page" class="page">
+        <div class="container">
+            <div class="assessment-header">
+                <div class="logo-small">
+                    <h3>STAR-Shaigan</h3>
+                </div>
+                <div class="user-info">
+                    <span id="user-name-display"></span>
+                </div>
+            </div>
+            
+            <div class="progress-container">
+                <div class="progress-bar">
+                    <div class="progress-fill" id="progress-fill"></div>
+                </div>
+                <span class="progress-text" id="progress-text">Question 1 of 25</span>
+            </div>
+            
+            <div class="question-card glassmorphic">
+                <div class="question-number" id="question-number">1</div>
+                <div class="question-text" id="question-text"></div>
+                
+                <div class="options">
+                    <button class="option-btn" data-value="5">Strongly Agree</button>
+                    <button class="option-btn" data-value="4">Agree</button>
+                    <button class="option-btn" data-value="3">Neutral</button>
+                    <button class="option-btn" data-value="2">Disagree</button>
+                    <button class="option-btn" data-value="1">Strongly Disagree</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Page -->
+    <div id="results-page" class="page">
+        <div class="container">
+            <div class="results-header">
+                <div class="logo-container">
+                    <div class="logo animated-logo">
+                        <div class="logo-glow"></div>
+                        <h2>STAR-Shaigan</h2>
+                        <p>Learning Portal</p>
+                    </div>
+                </div>
+                <h1>Your Leadership Assessment Results</h1>
+                <p class="user-greeting">Congratulations, <span id="results-user-name"></span>!</p>
+            </div>
+            
+            <div class="results-content">
+                <div class="primary-style glassmorphic">
+                    <h3>Your Primary Leadership Style</h3>
+                    <div class="primary-style-display">
+                        <div class="style-name" id="primary-style-name"></div>
+                        <div class="style-percentage" id="primary-style-percentage"></div>
+                    </div>
+                    <div class="style-description" id="primary-style-description"></div>
+                </div>
+                
+                <div class="all-styles glassmorphic">
+                    <h3>Complete Leadership Profile</h3>
+                    <div class="styles-grid" id="styles-grid"></div>
+                </div>
+                
+                <div class="development-tips glassmorphic">
+                    <h3>Development Recommendations</h3>
+                    <div id="development-content"></div>
+                </div>
+            </div>
+            
+            <div class="certificate-section">
+                <button id="generate-certificate" class="btn-primary">Generate Certificate</button>
+                <button id="retake-assessment" class="btn-secondary">Retake Assessment</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Certificate Modal -->
+    <div id="certificate-modal" class="modal">
+        <div class="modal-content certificate-content">
+            <span class="close">&times;</span>
+            <div id="certificate" class="certificate">
+                <div class="certificate-header">
+                    <div class="cert-logo">
+                        <h2>STAR-Shaigan</h2>
+                        <p>Learning Portal</p>
+                    </div>
+                </div>
+                
+                <div class="certificate-body">
+                    <h1>Leadership Assessment Certificate</h1>
+                    <p class="cert-text">This is to certify that</p>
+                    <h2 class="cert-name" id="cert-name"></h2>
+                    <p class="cert-text">has successfully completed the Leadership Assessment</p>
+                    <p class="cert-text">and demonstrated proficiency in</p>
+                    <h3 class="cert-style" id="cert-style"></h3>
+                    <p class="cert-score">Score: <span id="cert-score"></span>%</p>
+                    
+                    <div class="certificate-footer">
+                        <p>Certificate is presented from STAR-Shaigan Learning Portal</p>
+                        <p><strong>Zubair Ahmad</strong><br>Senior SFE Manager</p>
+                        <div class="cert-date" id="cert-date"></div>
+                    </div>
+                </div>
+            </div>
+            <button id="print-certificate" class="btn-primary">Print Certificate</button>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="statements.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

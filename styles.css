@@ -1,0 +1,641 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Inter', sans-serif;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    min-height: 100vh;
+    overflow-x: hidden;
+}
+
+.container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* Page Transitions */
+.page {
+    display: none;
+    min-height: 100vh;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.5s ease;
+}
+
+.page.active {
+    display: block;
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Glassmorphic Effect */
+.glassmorphic {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border-radius: 20px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+}
+
+/* Logo Animations */
+.logo-container {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.animated-logo {
+    position: relative;
+    display: inline-block;
+    padding: 20px;
+}
+
+.logo-glow {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+@keyframes glow {
+    from {
+        transform: scale(1);
+        opacity: 0.5;
+    }
+    to {
+        transform: scale(1.1);
+        opacity: 0.8;
+    }
+}
+
+.logo h1, .logo h2 {
+    color: white;
+    font-weight: 700;
+    font-size: 2.5rem;
+    margin-bottom: 5px;
+    text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+}
+
+.logo p {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    font-weight: 300;
+}
+
+/* Landing Page */
+.welcome-card {
+    max-width: 500px;
+    margin: 0 auto;
+    padding: 40px;
+    text-align: center;
+}
+
+.welcome-card h2 {
+    color: white;
+    font-size: 2rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.subtitle {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+    line-height: 1.5;
+}
+
+/* Form Styles */
+.user-form {
+    text-align: left;
+}
+
+.form-group {
+    margin-bottom: 20px;
+}
+
+.form-group label {
+    display: block;
+    color: white;
+    font-weight: 500;
+    margin-bottom: 8px;
+    font-size: 0.9rem;
+}
+
+.form-group input {
+    width: 100%;
+    padding: 12px 16px;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+}
+
+.form-group input:focus {
+    outline: none;
+    border-color: rgba(255, 255, 255, 0.6);
+    background: rgba(255, 255, 255, 0.15);
+}
+
+.form-group input::placeholder {
+    color: rgba(255, 255, 255, 0.6);
+}
+
+/* Buttons */
+.btn-primary, .btn-secondary {
+    padding: 14px 28px;
+    border: none;
+    border-radius: 10px;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-block;
+    text-align: center;
+}
+
+.btn-primary {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 107, 107, 0.4);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(255, 107, 107, 0.6);
+}
+
+.btn-secondary {
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    margin-left: 10px;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+
+/* Assessment Page */
+.assessment-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 30px;
+}
+
+.logo-small h3 {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 700;
+}
+
+.user-info {
+    color: rgba(255, 255, 255, 0.9);
+    font-weight: 500;
+}
+
+/* Progress Bar */
+.progress-container {
+    margin-bottom: 30px;
+}
+
+.progress-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.progress-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+    border-radius: 4px;
+    transition: width 0.5s ease;
+    width: 0%;
+}
+
+.progress-text {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+
+/* Question Card */
+.question-card {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 40px;
+    text-align: center;
+}
+
+.question-number {
+    display: inline-block;
+    width: 50px;
+    height: 50px;
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    color: white;
+    border-radius: 50%;
+    line-height: 50px;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+.question-text {
+    color: white;
+    font-size: 1.3rem;
+    line-height: 1.6;
+    margin-bottom: 40px;
+    font-weight: 400;
+}
+
+.options {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    max-width: 400px;
+    margin: 0 auto;
+}
+
+.option-btn {
+    padding: 15px 20px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    background: rgba(255, 255, 255, 0.1);
+    color: white;
+    font-size: 1rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.option-btn:hover {
+    background: rgba(255, 255, 255, 0.2);
+    border-color: rgba(255, 255, 255, 0.5);
+    transform: translateY(-2px);
+}
+
+.option-btn.selected {
+    background: linear-gradient(135deg, #ff6b6b, #ee5a24);
+    border-color: #ff6b6b;
+    transform: scale(1.02);
+}
+
+/* Results Page */
+.results-header {
+    text-align: center;
+    margin-bottom: 40px;
+}
+
+.results-header h1 {
+    color: white;
+    font-size: 2.5rem;
+    margin-bottom: 10px;
+    font-weight: 700;
+}
+
+.user-greeting {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.2rem;
+    font-weight: 500;
+}
+
+.results-content {
+    display: grid;
+    gap: 30px;
+    margin-bottom: 40px;
+}
+
+.primary-style {
+    padding: 30px;
+    text-align: center;
+}
+
+.primary-style h3 {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+}
+
+.primary-style-display {
+    margin-bottom: 20px;
+}
+
+.style-name {
+    color: #ff6b6b;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.style-percentage {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 600;
+}
+
+.style-description {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1.1rem;
+    line-height: 1.6;
+}
+
+.all-styles {
+    padding: 30px;
+}
+
+.all-styles h3 {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.styles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 20px;
+}
+
+.style-item {
+    background: rgba(255, 255, 255, 0.1);
+    padding: 20px;
+    border-radius: 15px;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+.style-item h4 {
+    color: #ff6b6b;
+    font-size: 1.2rem;
+    margin-bottom: 10px;
+    font-weight: 600;
+}
+
+.style-score {
+    color: white;
+    font-size: 1.5rem;
+    font-weight: 700;
+    margin-bottom: 10px;
+}
+
+.style-bar {
+    width: 100%;
+    height: 8px;
+    background: rgba(255, 255, 255, 0.2);
+    border-radius: 4px;
+    overflow: hidden;
+    margin-bottom: 10px;
+}
+
+.style-bar-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #ff6b6b, #ee5a24);
+    border-radius: 4px;
+    transition: width 1s ease;
+}
+
+.style-desc {
+    color: rgba(255, 255, 255, 0.8);
+    font-size: 0.9rem;
+    line-height: 1.4;
+}
+
+.development-tips {
+    padding: 30px;
+}
+
+.development-tips h3 {
+    color: white;
+    font-size: 1.5rem;
+    margin-bottom: 20px;
+    font-weight: 600;
+    text-align: center;
+}
+
+.development-tips ul {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+    line-height: 1.6;
+    list-style-position: inside;
+}
+
+.development-tips li {
+    margin-bottom: 10px;
+}
+
+.certificate-section {
+    text-align: center;
+}
+
+/* Certificate Modal */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.modal-content {
+    background: white;
+    margin: 2% auto;
+    padding: 20px;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 900px;
+    position: relative;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+    cursor: pointer;
+    position: absolute;
+    right: 20px;
+    top: 15px;
+}
+
+.close:hover {
+    color: black;
+}
+
+/* Certificate Styles */
+.certificate {
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    border: 3px solid #667eea;
+    border-radius: 15px;
+    padding: 40px;
+    text-align: center;
+    margin-bottom: 20px;
+    min-height: 600px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+}
+
+.certificate-header {
+    border-bottom: 2px solid #667eea;
+    padding-bottom: 20px;
+    margin-bottom: 30px;
+}
+
+.cert-logo h2 {
+    color: #667eea;
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 5px;
+}
+
+.cert-logo p {
+    color: #764ba2;
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+.certificate-body h1 {
+    color: #667eea;
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 30px;
+}
+
+.cert-text {
+    color: #333;
+    font-size: 1.1rem;
+    margin-bottom: 10px;
+}
+
+.cert-name {
+    color: #764ba2;
+    font-size: 2rem;
+    font-weight: 700;
+    margin: 20px 0;
+    text-decoration: underline;
+}
+
+.cert-style {
+    color: #ff6b6b;
+    font-size: 1.8rem;
+    font-weight: 700;
+    margin: 20px 0;
+}
+
+.cert-score {
+    color: #667eea;
+    font-size: 1.3rem;
+    font-weight: 600;
+    margin-bottom: 30px;
+}
+
+.certificate-footer {
+    border-top: 2px solid #667eea;
+    padding-top: 20px;
+    margin-top: 30px;
+}
+
+.certificate-footer p {
+    color: #333;
+    font-size: 1rem;
+    margin-bottom: 10px;
+}
+
+.cert-date {
+    color: #667eea;
+    font-weight: 600;
+    font-size: 1rem;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .container {
+        padding: 15px;
+    }
+    
+    .welcome-card {
+        padding: 30px 20px;
+    }
+    
+    .question-card {
+        padding: 30px 20px;
+    }
+    
+    .question-text {
+        font-size: 1.1rem;
+    }
+    
+    .options {
+        max-width: 100%;
+    }
+    
+    .styles-grid {
+        grid-template-columns: 1fr;
+    }
+    
+    .assessment-header {
+        flex-direction: column;
+        gap: 15px;
+        text-align: center;
+    }
+    
+    .certificate {
+        padding: 20px;
+        min-height: auto;
+    }
+    
+    .certificate-body h1 {
+        font-size: 2rem;
+    }
+    
+    .cert-name {
+        font-size: 1.5rem;
+    }
+    
+    .cert-style {
+        font-size: 1.4rem;
+    }
+    
+    .modal-content {
+        width: 95%;
+        margin: 5% auto;
+    }
+}
+
+@media print {
+    .modal-content {
+        background: none;
+        box-shadow: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+    }
+    
+    .close, #print-certificate {
+        display: none;
+    }
+    
+    .certificate {
+        border: 3px solid #000;
+        margin: 0;
+        page-break-inside: avoid;
+    }
+}
