@@ -33,15 +33,12 @@ async function initializeApp() {
         // Check if user has completed assessment
         const existingUser = await checkExistingUser(currentUser.fullName);
         if (existingUser && existingUser.assessment_completed) {
-            // Show results page with existing data
             displayResults(existingUser);
             showPage('results-page');
         } else {
-            // Continue to assessment
             startAssessment();
         }
     } else {
-        // Show landing page
         showPage('landing-page');
     }
     
@@ -49,25 +46,14 @@ async function initializeApp() {
 }
 
 function setupEventListeners() {
-    // User form submission
     document.getElementById('user-form').addEventListener('submit', handleUserFormSubmit);
-    
-    // Option buttons
     document.querySelectorAll('.option-btn').forEach(btn => {
         btn.addEventListener('click', handleOptionSelect);
     });
-    
-    // Certificate generation
     document.getElementById('generate-certificate').addEventListener('click', showCertificate);
     document.getElementById('print-certificate').addEventListener('click', printCertificate);
-    
-    // Retake assessment
     document.getElementById('retake-assessment').addEventListener('click', retakeAssessment);
-    
-    // Modal close
     document.querySelector('.close').addEventListener('click', closeCertificateModal);
-    
-    // Close modal when clicking outside
     window.addEventListener('click', function(event) {
         const modal = document.getElementById('certificate-modal');
         if (event.target === modal) {
@@ -87,7 +73,6 @@ async function handleUserFormSubmit(e) {
         designation: formData.get('designation')
     };
     
-    // Save initial user details
     const userData = {
         full_name: currentUser.fullName,
         city: currentUser.city,
@@ -100,10 +85,8 @@ async function handleUserFormSubmit(e) {
         return;
     }
     
-    // Save user to localStorage
     localStorage.setItem('currentUser', JSON.stringify(currentUser));
     
-    // Check if user already exists and has completed assessment
     const existingUser = await checkExistingUser(currentUser.fullName);
     if (existingUser && existingUser.assessment_completed) {
         displayResults(existingUser);
@@ -134,52 +117,38 @@ async function checkExistingUser(fullName) {
 }
 
 function startAssessment() {
-    // Generate random questions
     currentQuestions = generateRandomQuestions();
     currentQuestionIndex = 0;
     responses = [];
     
-    // Update UI
     document.getElementById('user-name-display').textContent = currentUser.fullName;
-    
-    // Show first question
     displayQuestion();
     showPage('assessment-page');
 }
 
 function generateRandomQuestions() {
-    // Ensure we get at least 4 questions from each style (24 total) plus 1 random
     const questionsByStyle = {
-        coercive: [],
-        authoritative: [],
-        affiliative: [],
-        democratic: [],
-        pacesetting: [],
-        coaching: []
+        coercive: [], authoritative: [], affiliative: [], democratic: [], pacesetting: [], coaching: []
     };
     
-    // Group statements by style
     LEADERSHIP_STATEMENTS.forEach(statement => {
         questionsByStyle[statement.style].push(statement);
     });
     
     const selectedQuestions = [];
     
-    // Select 4 questions from each style
     Object.keys(questionsByStyle).forEach(style => {
         const styleQuestions = questionsByStyle[style];
         const shuffled = [...styleQuestions].sort(() => 0.5 - Math.random());
         selectedQuestions.push(...shuffled.slice(0, 4));
     });
     
-    // Add 1 more random question to make 25 total
     const remainingQuestions = LEADERSHIP_STATEMENTS.filter(
         statement => !selectedQuestions.find(q => q.id === statement.id)
     );
     const randomQuestion = remainingQuestions[Math.floor(Math.random() * remainingQuestions.length)];
     selectedQuestions.push(randomQuestion);
     
-    // Shuffle the final array
     return selectedQuestions.sort(() => 0.5 - Math.random());
 }
 
@@ -187,14 +156,12 @@ function displayQuestion() {
     const question = currentQuestions[currentQuestionIndex];
     
     document.getElementById('question-number').textContent = currentQuestionIndex + 1;
-    document.getElementById('question-text').textContent = question.text;
+    document.getElementById('question-text').textContent = question ? question.text : 'No question available';
     document.getElementById('progress-text').textContent = `Question ${currentQuestionIndex + 1} of 25`;
     
-    // Update progress bar
     const progressPercentage = ((currentQuestionIndex + 1) / 25) * 100;
     document.getElementById('progress-fill').style.width = `${progressPercentage}%`;
     
-    // Reset option buttons
     document.querySelectorAll('.option-btn').forEach(btn => {
         btn.classList.remove('selected');
     });
@@ -204,36 +171,34 @@ function handleOptionSelect(e) {
     const selectedValue = parseInt(e.target.dataset.value);
     const question = currentQuestions[currentQuestionIndex];
     
-    // Store response
-    responses.push({
-        questionId: question.id,
-        style: question.style,
-        value: selectedValue
-    });
-    
-    // Visual feedback
-    document.querySelectorAll('.option-btn').forEach(btn => {
-        btn.classList.remove('selected');
-    });
-    e.target.classList.add('selected');
-    
-    // Auto-advance after a short delay
-    setTimeout(() => {
-        currentQuestionIndex++;
+    if (question && question.id) {
+        responses.push({
+            questionId: question.id,
+            style: question.style,
+            value: selectedValue
+        });
         
-        if (currentQuestionIndex < currentQuestions.length) {
-            displayQuestion();
-        } else {
-            finishAssessment();
-        }
-    }, 800);
+        document.querySelectorAll('.option-btn').forEach(btn => {
+            btn.classList.remove('selected');
+        });
+        e.target.classList.add('selected');
+        
+        setTimeout(() => {
+            currentQuestionIndex++;
+            if (currentQuestionIndex < currentQuestions.length) {
+                displayQuestion();
+            } else {
+                finishAssessment();
+            }
+        }, 800);
+    } else {
+        console.error('Invalid question at index:', currentQuestionIndex);
+    }
 }
 
 async function finishAssessment() {
-    // Calculate scores
     const scores = calculateScores();
     
-    // Save assessment results
     const assessmentData = {
         full_name: currentUser.fullName,
         ...scores,
@@ -245,7 +210,6 @@ async function finishAssessment() {
         return;
     }
     
-    // Display results
     displayResults({
         ...currentUser,
         ...scores,
@@ -257,31 +221,14 @@ async function finishAssessment() {
 }
 
 function calculateScores() {
-    const styleScores = {
-        coercive: 0,
-        authoritative: 0,
-        affiliative: 0,
-        democratic: 0,
-        pacesetting: 0,
-        coaching: 0
-    };
+    const styleScores = { coercive: 0, authoritative: 0, affiliative: 0, democratic: 0, pacesetting: 0, coaching: 0 };
+    const styleCounts = { coercive: 0, authoritative: 0, affiliative: 0, democratic: 0, pacesetting: 0, coaching: 0 };
     
-    const styleCounts = {
-        coercive: 0,
-        authoritative: 0,
-        affiliative: 0,
-        democratic: 0,
-        pacesetting: 0,
-        coaching: 0
-    };
-    
-    // Sum scores by style
     responses.forEach(response => {
         styleScores[response.style] += response.value;
         styleCounts[response.style]++;
     });
     
-    // Calculate averages and percentages
     const stylePercentages = {};
     let maxScore = 0;
     let primaryStyle = '';
@@ -291,7 +238,6 @@ function calculateScores() {
             const average = styleScores[style] / styleCounts[style];
             const percentage = (average / 5) * 100;
             stylePercentages[style] = Math.round(percentage);
-            
             if (percentage > maxScore) {
                 maxScore = percentage;
                 primaryStyle = style;
@@ -316,7 +262,7 @@ async function saveLeadershipData(data) {
     try {
         const { data: result, error } = await supabase
             .from('updated_leadership')
-            .upsert(data, { onConflict: 'full_name' });
+            .upsert([data], { onConflict: 'full_name' });
         
         if (error) {
             console.error('Error saving leadership data:', error.message);
@@ -333,16 +279,13 @@ async function saveLeadershipData(data) {
 }
 
 function displayResults(userData) {
-    // Update user name
     document.getElementById('results-user-name').textContent = userData.full_name || userData.fullName;
     
-    // Display primary style
     const primaryStyleInfo = LEADERSHIP_STYLES[userData.primary_style];
     document.getElementById('primary-style-name').textContent = primaryStyleInfo.name;
     document.getElementById('primary-style-percentage').textContent = `${userData[userData.primary_style + '_score']}%`;
     document.getElementById('primary-style-description').textContent = primaryStyleInfo.description;
     
-    // Display all styles
     const stylesGrid = document.getElementById('styles-grid');
     stylesGrid.innerHTML = '';
     
@@ -360,11 +303,9 @@ function displayResults(userData) {
             </div>
             <div class="style-desc">${style.description.substring(0, 100)}...</div>
         `;
-        
         stylesGrid.appendChild(styleItem);
     });
     
-    // Display development tips
     const developmentContent = document.getElementById('development-content');
     const primaryStyleTips = LEADERSHIP_STYLES[userData.primary_style].tips;
     developmentContent.innerHTML = `
@@ -378,7 +319,6 @@ function showCertificate() {
     const userData = getCurrentUserData();
     const primaryStyleInfo = LEADERSHIP_STYLES[userData.primary_style];
     
-    // Update certificate content
     document.getElementById('cert-name').textContent = userData.full_name || userData.fullName;
     document.getElementById('cert-style').textContent = primaryStyleInfo.name + ' Leadership';
     document.getElementById('cert-score').textContent = userData[userData.primary_style + '_score'];
@@ -388,7 +328,6 @@ function showCertificate() {
         day: 'numeric'
     });
     
-    // Show modal
     document.getElementById('certificate-modal').style.display = 'block';
 }
 
@@ -401,36 +340,28 @@ function closeCertificateModal() {
 }
 
 function retakeAssessment() {
-    // Clear current data
     currentUser = null;
     currentQuestions = [];
     currentQuestionIndex = 0;
     responses = [];
     usedStatementIds = [];
     
-    // Clear localStorage
     localStorage.removeItem('currentUser');
     
-    // Show landing page
     showPage('landing-page');
-    
-    // Reset form
     document.getElementById('user-form').reset();
 }
 
 function getCurrentUserData() {
-    // This would normally come from the database, but for demo purposes
-    // we'll construct it from current session data
     const savedUser = localStorage.getItem('currentUser');
     if (savedUser) {
         const user = JSON.parse(savedUser);
-        // Add mock scores for demo
         return {
             full_name: user.fullName,
             city: user.city,
             team: user.team,
             designation: user.designation,
-            primary_style: 'authoritative', // This would come from actual calculation
+            primary_style: 'authoritative',
             coercive_score: 65,
             authoritative_score: 85,
             affiliative_score: 70,
