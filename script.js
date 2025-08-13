@@ -87,17 +87,28 @@ async function handleUserFormSubmit(e) {
         designation: formData.get('designation')
     };
     
+    // Save initial user details
+    const userData = {
+        full_name: currentUser.fullName,
+        city: currentUser.city,
+        team: currentUser.team,
+        designation: currentUser.designation,
+        assessment_completed: false
+    };
+    const userSaved = await saveLeadershipData(userData);
+    if (!userSaved) {
+        return;
+    }
+    
     // Save user to localStorage
     localStorage.setItem('currentUser', JSON.stringify(currentUser));
     
-    // Check if user already exists in database
+    // Check if user already exists and has completed assessment
     const existingUser = await checkExistingUser(currentUser.fullName);
     if (existingUser && existingUser.assessment_completed) {
-        // Show results page
         displayResults(existingUser);
         showPage('results-page');
     } else {
-        // Start new assessment
         startAssessment();
     }
 }
@@ -105,7 +116,7 @@ async function handleUserFormSubmit(e) {
 async function checkExistingUser(fullName) {
     try {
         const { data, error } = await supabase
-            .from('leadership_assessments')
+            .from('updated_leadership')
             .select('*')
             .eq('full_name', fullName)
             .single();
@@ -222,8 +233,17 @@ async function finishAssessment() {
     // Calculate scores
     const scores = calculateScores();
     
-    // Save to database
-    await saveAssessmentResults(scores);
+    // Save assessment results
+    const assessmentData = {
+        full_name: currentUser.fullName,
+        ...scores,
+        assessment_completed: true,
+        completed_at: new Date().toISOString()
+    };
+    const saved = await saveLeadershipData(assessmentData);
+    if (!saved) {
+        return;
+    }
     
     // Display results
     displayResults({
@@ -292,33 +312,23 @@ function calculateScores() {
     };
 }
 
-async function saveAssessmentResults(scores) {
+async function saveLeadershipData(data) {
     try {
-        const assessmentData = {
-            full_name: currentUser.fullName,
-            city: currentUser.city,
-            team: currentUser.team,
-            designation: currentUser.designation,
-            primary_style: scores.primary_style,
-            coercive_score: scores.coercive_score,
-            authoritative_score: scores.authoritative_score,
-            affiliative_score: scores.affiliative_score,
-            democratic_score: scores.democratic_score,
-            pacesetting_score: scores.pacesetting_score,
-            coaching_score: scores.coaching_score,
-            assessment_completed: true,
-            completed_at: new Date().toISOString()
-        };
-        
-        const { data, error } = await supabase
-            .from('leadership_assessments')
-            .upsert(assessmentData, { onConflict: 'full_name' });
+        const { data: result, error } = await supabase
+            .from('updated_leadership')
+            .upsert(data, { onConflict: 'full_name' });
         
         if (error) {
-            console.error('Error saving assessment results:', error);
+            console.error('Error saving leadership data:', error.message);
+            alert('Failed to save data. Please try again.');
+            return false;
         }
+        console.log('Leadership data saved successfully:', result);
+        return true;
     } catch (error) {
-        console.error('Error saving assessment results:', error);
+        console.error('Error saving leadership data:', error.message);
+        alert('An unexpected error occurred. Please try again.');
+        return false;
     }
 }
 
